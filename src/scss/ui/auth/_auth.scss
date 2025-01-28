@@ -4,47 +4,105 @@
 
 .auth {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   
   &__container {
     @include m.container-xm();
-    background-image: linear-gradient(45deg, v.$color-black, color.adjust(v.$color-black, $lightness: 15%) 70%, color.adjust(v.$color-black, $lightness: 25%) 90%);
+    background-image: linear-gradient(45deg, color.adjust(v.$color-black, $lightness: 2%), color.adjust(v.$color-black, $lightness: 10%) 70%, color.adjust(v.$color-black, $lightness: 15%) 90%);
     box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
-    border-radius: 1rem; // <-- Redondeado
+    border-radius: 2.5rem; // <-- Redondeado
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
+    overflow: hidden; 
     position: relative;
+
+    &::after, &::before{
+      position: absolute;
+      content: '';
+      width: 20rem;
+      height: 0.2rem;
+      transform-origin: 50% 50%;
+      background-color: v.$color-secondary;
+    }
+    &::after{
+      right: 0;
+      top: 0;
+      height: 0.3rem;
+      transform: translate(5rem, 5rem) rotate(45deg);
+    }
+
+    &::before{
+      left: 0;
+      bottom: 0;
+      transform: translate(-5rem, -5rem) rotate(45deg);
+    }
   }
 
   &__image {
     /* Máximo 5rem de alto en mobile */
-    min-height: 10rem;
-    border-radius: 1rem;
-    background-image: url('../img/auth.webp');
+    min-height: 7rem;
+    background-image: url('../img/logo.webp');
     background-position: center;
-    background-size: cover;
+    background-size: contain;
     background-repeat: no-repeat;
-
-    @include m.tablet{
-        max-height: none;
-        border-top-left-radius: 1rem;
-        border-bottom-left-radius: 1rem;
-    }
   }
 
   &__content {
-    padding: 2rem;
+    padding: 2rem 2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    @include m.telefono{
+      padding: 2rem 4rem;
+    }
   }
 
-  &__texto {
-    font-size: 2.4rem;
-    font-weight: 700;
+  &__title {
+    position: relative;
+    font-size: 2.6rem;
+    font-weight: v.$bold;
+    color: v.$color-white;
     margin-bottom: 2rem;
-    text-align: center;
+    padding-bottom: 2rem;
+    text-align: left;
+    border-bottom: 0.2rem dotted rgba(v.$color-white, 0.1);
+  
+    &::before{
+      content: "";
+      position: absolute;
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background-image: url('../img/icons/scissors.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain; 
+      bottom: 0;
+      right: 20%;
+      transform: translateY(50%);
+    }
+  }
+
+  &__close{
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+
+    &-icon{
+      display: block;
+      width: 3rem;
+      height: 3rem;
+      margin: 0 auto;
+    }
+
+    &-text{
+      color: color.adjust(v.$color-secondary, $lightness: 0%);
+      margin: 0;
+      font-size: v.$font-sm;
+    }
   }
 }
 
@@ -52,27 +110,36 @@
 .form {
   &__campo {
     margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    text-align: left;
+    border-bottom: 0.2rem dotted rgba(v.$color-white, 0.1);
+
+    &:nth-last-of-type(1){
+      border-bottom: none;
+    }
   }
   &__label {
     display: block;
     margin-bottom: 0.5rem;
-    font-weight: 600;
+    font-weight: v.$tiny;
+    color: v.$color-secondary;
   }
   &__input {
     width: 100%;
     padding: 1rem;
     border: 1px solid #ccc;
-    border-radius: 0.5rem;
+    border-radius: 1.8rem;    
     font-size: 1.6rem;
   }
   &__submit {
-    display: inline-block;
-    width: 100%;
-    padding: 1.4rem;
-    background-color: v.$color-primary;
-    color: v.$color-white;
+    display: block;
+    width: auto;
+    padding: 1.4rem 2.8rem;
+    margin: 0 auto;
+    background: linear-gradient(90deg, color.adjust(v.$color-secondary, $lightness: -20%), color.adjust(v.$color-secondary, $lightness: 10%), color.adjust(v.$color-secondary, $lightness: -20%));
+    color: v.$color-dark;
     border: none;
-    border-radius: 0.5rem;
+    border-radius: 1.8rem;
     font-size: 1.8rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -86,8 +153,13 @@
 }
 
 .acciones {
+  @include m.container-xm();
   margin-top: 2rem;
   text-align: center;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   &__enlace {
     display: block;
@@ -97,5 +169,10 @@
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  @include m.tablet
+  {
+    flex-direction: row;
   }
 }

@@ -1,18 +1,22 @@
 <main class="auth">
   <div class="auth__container">
     <!-- Imagen lateral -->
-    <div class="auth__deco auth__deco--right">
+    <div class="auth__close">
+      <img class="auth__close-icon" src="/build/img/icons/close.svg" alt="Icono de cerrar"/>
+      <p class="auth__close-text">
+        Cerrar
+      </p>
     </div>
-    <div class="auth__deco auth__deco--left">
-    </div>
-
     <!-- Contenido de inicio de sesión -->
     <div class="auth__content">
-      <p class="auth__texto">Inicia Sesión</p>
+      <div class="auth__image">
+
+      </div>
+      <p class="auth__title">Inicia Sesión</p>
 
       <form class="form" method="POST" action="login">
         <div class="form__campo">
-          <label for="email" class="form__label">Correo:</label>
+          <label for="email" class="form__label">Correo electrónico o número celular:</label>
           <input 
             type="email" 
             class="form__input" 
@@ -34,11 +38,10 @@
 
         <input type="submit" class="form__submit" value="Iniciar Sesión">
       </form>
-
-      <div class="acciones">
-        <a href="/registro" class="acciones__enlace">¿Aún no tienes cuenta? Obtén una</a>
-        <a href="/olvide" class="acciones__enlace">¿Olvidaste tu contraseña?</a>
-      </div>
     </div>
+  </div>
+  <div class="acciones">
+    <a href="/registro" class="acciones__enlace">¿Aún no tienes cuenta? Registrate</a>
+    <a href="/olvide" class="acciones__enlace">Recuperar contraseña</a>
   </div>
 </main>

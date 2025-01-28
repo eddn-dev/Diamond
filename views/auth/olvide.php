@@ -1,23 +1,34 @@
 <main class="auth">
-    <h2 class="auth__heading"><?php echo $titulo; ?></h2>
-    <p class="auth__texto">Recupera el acceso a tu cuenta</p>
-    <?php
-        require_once __DIR__ . '/../templates/alerts.php';
-    ?>  
-    <form class="form" method="POST" action="/olvide">
-        <div class="form__campo">
-            <label for="email" class="form__label">Correo:</label>
-            <input 
-                type="email" 
-                class="form__input" 
-                placeholder="Tu dirección de correo"
-                id="email"
-                name="email"
-            >
+    <div class="auth__container">
+
+        <!-- Botón/Cerrar -->
+        <div class="auth__close">
+            <img class="auth__close-icon" src="/build/img/icons/close.svg" alt="Icono de cerrar"/>
+            <p class="auth__close-text">Cerrar</p>
         </div>
 
-        <input type="submit" class="form__submit" value="Enviar instrucciones">
-    </form>
+        <!-- Contenido principal -->
+        <div class="auth__content">
+            <div class="auth__image"></div>
+
+            <p class="auth__title"><?php echo $titulo; ?></p>
+            
+            <form class="form" method="POST" action="/olvide">
+                <div class="form__campo">
+                    <label for="email" class="form__label">Correo electrónico o número celular:</label>
+                    <input 
+                        type="text" 
+                        class="form__input" 
+                        placeholder="Tu correo o número celular"
+                        id="email"
+                        name="email"
+                    >
+                </div>
+
+                <input type="submit" class="form__submit" value="Enviar instrucciones">
+            </form>
+        </div>
+    </div>
 
     <div class="acciones">
         <a href="/login" class="acciones__enlace">¿Ya tienes una cuenta? Inicia sesión</a>

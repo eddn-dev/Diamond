@@ -17,9 +17,7 @@
 </head>
 <body>
     <?php 
-        include_once __DIR__ .'/templates/header.php';
         echo $content;
-        include_once __DIR__ .'/templates/footer.php'; 
     ?>
     <script src="/build/js/bundle.min.js" defer></script>
 </body>

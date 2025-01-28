@@ -388,7 +388,7 @@ h3 {
   -o-transition: box-shadow 0.3s ease 0s;
 }
 .header__container {
-  width: min(95%, 120rem);
+  width: min(90%, 120rem);
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -552,72 +552,132 @@ h3 {
 
 .auth {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 .auth__container {
-  width: min(95%, 60rem);
+  width: min(90%, 50rem);
   margin: 0 auto;
-  background-image: linear-gradient(45deg, #000000, rgb(38.25, 38.25, 38.25) 70%, rgb(63.75, 63.75, 63.75) 90%);
+  background-image: linear-gradient(45deg, rgb(5.1, 5.1, 5.1), rgb(25.5, 25.5, 25.5) 70%, rgb(38.25, 38.25, 38.25) 90%);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-  border-radius: 1rem;
+  border-radius: 2.5rem;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   position: relative;
+}
+.auth__container::after, .auth__container::before {
+  position: absolute;
+  content: "";
+  width: 20rem;
+  height: 0.2rem;
+  transform-origin: 50% 50%;
+  background-color: #FFE063;
+}
+.auth__container::after {
+  right: 0;
+  top: 0;
+  height: 0.3rem;
+  transform: translate(5rem, 5rem) rotate(45deg);
+}
+.auth__container::before {
+  left: 0;
+  bottom: 0;
+  transform: translate(-5rem, -5rem) rotate(45deg);
 }
 .auth__image {
   /* Máximo 5rem de alto en mobile */
-  min-height: 10rem;
-  border-radius: 1rem;
-  background-image: url("../img/auth.webp");
+  min-height: 7rem;
+  background-image: url("../img/logo.webp");
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
 }
-@media (min-width: 768px) {
-  .auth__image {
-    max-height: none;
-    border-top-left-radius: 1rem;
-    border-bottom-left-radius: 1rem;
-  }
-}
 .auth__content {
-  padding: 2rem;
+  padding: 2rem 2rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-.auth__texto {
-  font-size: 2.4rem;
+@media (min-width: 480px) {
+  .auth__content {
+    padding: 2rem 4rem;
+  }
+}
+.auth__title {
+  position: relative;
+  font-size: 2.6rem;
   font-weight: 700;
+  color: #FFFFFF;
   margin-bottom: 2rem;
-  text-align: center;
+  padding-bottom: 2rem;
+  text-align: left;
+  border-bottom: 0.2rem dotted rgba(255, 255, 255, 0.1);
+}
+.auth__title::before {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url("../img/icons/scissors.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  bottom: 0;
+  right: 20%;
+  transform: translateY(50%);
+}
+.auth__close {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+}
+.auth__close-icon {
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto;
+}
+.auth__close-text {
+  color: #ffe063;
+  margin: 0;
+  font-size: 1.2rem;
 }
 
 /* Resto de estilos (formularios, etc.) */
 .form__campo {
   margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  text-align: left;
+  border-bottom: 0.2rem dotted rgba(255, 255, 255, 0.1);
+}
+.form__campo:nth-last-of-type(1) {
+  border-bottom: none;
 }
 .form__label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: 600;
+  font-weight: 300;
+  color: #FFE063;
 }
 .form__input {
   width: 100%;
   padding: 1rem;
   border: 1px solid #ccc;
-  border-radius: 0.5rem;
+  border-radius: 1.8rem;
   font-size: 1.6rem;
 }
 .form__submit {
-  display: inline-block;
-  width: 100%;
-  padding: 1.4rem;
-  background-color: #E14F3E;
-  color: #FFFFFF;
+  display: block;
+  width: auto;
+  padding: 1.4rem 2.8rem;
+  margin: 0 auto;
+  background: linear-gradient(90deg, rgb(252, 201.9230769231, 0), rgb(255, 234.1346153846, 150), rgb(252, 201.9230769231, 0));
+  color: #240501;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 1.8rem;
   font-size: 1.8rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -632,8 +692,13 @@ h3 {
 }
 
 .acciones {
+  width: min(90%, 50rem);
+  margin: 0 auto;
   margin-top: 2rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .acciones__enlace {
   display: block;
@@ -643,5 +708,10 @@ h3 {
 }
 .acciones__enlace:hover {
   text-decoration: underline;
+}
+@media (min-width: 768px) {
+  .acciones {
+    flex-direction: row;
+  }
 }
 /*# sourceMappingURL=app.css.map */
