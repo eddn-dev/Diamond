@@ -1,0 +1,25 @@
+@use 'variables' as v;
+@use 'mixins' as m;
+
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
+    height: 100%;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+body {
+    font-family: v.$font-family;
+    padding-top: 7rem;
+    font-size: 1.8rem;
+    color: v.$color-dark;
+    background-color: v.$color-black;
+}
+a {
+    text-decoration: none;
+}
+img {
+    width: 100%;
+    height: auto;
+}

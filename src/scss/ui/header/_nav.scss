@@ -1,0 +1,187 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+@use 'sass:color';
+
+/* Bloquea el scroll cuando se abre el menú overlay */
+.nav-open {
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ----------------- HEADER ----------------- */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 999; // La barra
+  background-color: transparent;
+  padding: 1rem 0;
+
+  @include m.transition(background-color, 0.3s);
+  @include m.transition(backdrop-filter, 0.3s);
+  @include m.transition(box-shadow, 0.3s);
+
+  &__container {
+    @include m.container();
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__logo {
+    width: 5rem;
+    height: 5rem;
+    background-image: url('../img/logo.webp');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  // BOTÓN HAMBURGUESA (solo mobile)
+  &__toggle {
+    display: block;
+    position: relative;
+    z-index: 10000; 
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 3rem;
+    height: 2rem;
+    z-index: 1000;
+
+    span {
+      display: block;
+      width: 100%;
+      height: 0.3rem;
+      background-color: v.$color-white;
+      margin-bottom: 0.4rem;
+      @include m.transition(all, 0.3s);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    &.is-active {
+      span:nth-child(1) {
+        transform: translateY(0.7rem) rotate(45deg);
+      }
+      span:nth-child(2) {
+        opacity: 0;
+      }
+      span:nth-child(3) {
+        transform: translateY(-0.7rem) rotate(-45deg);
+      }
+    }
+
+    @include m.tablet {
+      display: none; // en desktop, oculto
+    }
+  }
+
+  // Menú de escritorio
+  &__nav-desktop {
+    display: none; // por defecto en mobile
+    @include m.tablet {
+      display: block; // a partir de tablet, se muestra
+    }
+
+    .header__list {
+      @include m.list-reset();
+      display: flex;
+      gap: 2rem;
+
+      .header__item {
+        position: relative;
+      }
+    }
+
+    .header__link {
+      color: v.$color-white;
+      font-size: 1.5rem;
+      font-weight: v.$tiny;
+      text-transform: uppercase;
+      position: relative; 
+      @include m.transition(color, 0.3s);
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 0%;
+        height: 2px;
+        background-color: v.$color-primary;
+        @include m.transition(width, 0.3s);
+      }
+      &:hover {
+        color: color.adjust(v.$color-primary, $lightness: 20%); 
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  &--scrolled {
+    backdrop-filter: blur(9px) saturate(180%);
+    -webkit-backdrop-filter: blur(9px) saturate(180%);
+    background-color: rgba(17, 25, 40, 0.34);
+    // Sombra con luminosidad
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2rem 4rem rgba(157, 145, 235, 0.1);
+  }
+}
+
+/* ----------------- OVERLAY NAV (MÓVIL) ----------------- */
+.overlay-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 500; 
+  background-color: v.$glass-effect; // ej. rgba(255,255,255,0.1)
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+
+  // Inicialmente oculto
+  opacity: 0;
+  pointer-events: none; 
+  transform: translateY(-100%);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+
+  // Activo -> se muestra
+  &.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  // Centro el contenido
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  // En tablet/desktop, no se usa este overlay
+  @include m.tablet {
+    display: none; // lo ocultamos en pantallas grandes
+  }
+
+  &__list {
+    @include m.list-reset();
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  &__link {
+    color: v.$color-white;
+    font-size: 2rem;
+    font-weight: v.$bold;
+    text-transform: uppercase;
+    font-style: italic;
+    position: relative;
+    @include m.transition(color, 0.3s);
+
+    &:hover {
+      color: color.adjust(v.$color-primary, $lightness: 20%);
+    }
+  }
+}

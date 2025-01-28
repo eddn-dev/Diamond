@@ -1,0 +1,101 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+@use 'sass:color';
+
+.auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &__container {
+    @include m.container-xm();
+    background-image: linear-gradient(45deg, v.$color-black, color.adjust(v.$color-black, $lightness: 15%) 70%, color.adjust(v.$color-black, $lightness: 25%) 90%);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+    border-radius: 1rem; // <-- Redondeado
+    display: flex;
+    flex-direction: column; 
+    position: relative;
+  }
+
+  &__image {
+    /* Máximo 5rem de alto en mobile */
+    min-height: 10rem;
+    border-radius: 1rem;
+    background-image: url('../img/auth.webp');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    @include m.tablet{
+        max-height: none;
+        border-top-left-radius: 1rem;
+        border-bottom-left-radius: 1rem;
+    }
+  }
+
+  &__content {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__texto {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+}
+
+/* Resto de estilos (formularios, etc.) */
+.form {
+  &__campo {
+    margin-bottom: 2rem;
+  }
+  &__label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  &__input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 1.6rem;
+  }
+  &__submit {
+    display: inline-block;
+    width: 100%;
+    padding: 1.4rem;
+    background-color: v.$color-primary;
+    color: v.$color-white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    @include m.transition(background-color, 0.3s);
+
+    &:hover {
+      background-color: color.adjust(v.$color-primary, $lightness: -10%);
+    }
+  }
+}
+
+.acciones {
+  margin-top: 2rem;
+  text-align: center;
+
+  &__enlace {
+    display: block;
+    margin-bottom: 1rem;
+    color: v.$color-primary;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

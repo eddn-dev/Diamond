@@ -1,0 +1,1 @@
+<h2 class="bashboard__heading"><?php echo $titulo; ?></h2>

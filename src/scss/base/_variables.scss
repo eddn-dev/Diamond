@@ -1,0 +1,30 @@
+// Fuentes
+@use 'sass:color';
+$font-family: 'Outfit', sans-serif;
+
+// Tamaño de Media Queries
+$telefono: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+$xl_desktop: 1200px;
+
+// Colores
+$color-primary: #E14F3E;
+$color-secondary: #FFE063;
+$color-black: #000000;
+$color-dark: #240501;
+$color-light: #F2EED4;
+$color-white: #FFFFFF;
+$color-gray: #36312B;
+$color-red: rgb(169, 0, 0);
+$color-green: #02db02;
+
+$gradient-background: linear-gradient(90deg, color.adjust($color-gray, $lightness: 10%) 0%, color.adjust($color-gray, $lightness: -10%)  100%);
+$gradient-button: linear-gradient(90deg, #6b3fa5 0%, #6961fa 100%);
+$glass-effect: rgba(255, 255, 255, 0.1);
+
+// Fuentes
+$tiny: 300;
+$regular: 400;
+$bold: 700;
+$black: 900;
