@@ -1,5 +1,5 @@
 {
-    "name": "Edd n' dev/Diamond",
+    "name": "eddndev/diamond",
     "description": "Proyecto con MVC, PHP8, SASS y JavaScript//IFFE's",
     "type": "project",
     "autoload": {

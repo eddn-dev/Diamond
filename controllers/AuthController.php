@@ -58,7 +58,7 @@ class AuthController {
         View::render('auth/login', [
             'title' => 'Iniciar Sesión',
             'alertas' => $alertas
-        ]);
+        ],'empty-layout.php');
     }
 
     public static function logout() {
@@ -116,7 +116,7 @@ class AuthController {
             'titulo' => 'Crea tu cuenta',
             'usuario' => $usuario,
             'alertas' => $alertas
-        ]);
+        ],'empty-layout.php');
     }    
 
     public static function olvide(Router $router) {
@@ -161,7 +161,7 @@ class AuthController {
         View::render('auth/olvide', [
             'titulo' => 'Olvide mi Password',
             'alertas' => $alertas
-        ]);
+        ],'empty-layout.php');
     }
 
     public static function reestablecer(Router $router) {
@@ -218,13 +218,13 @@ class AuthController {
             'titulo' => 'Reestablecer Password',
             'alertas' => $alertas,
             'token_valido' => $token_valido
-        ]);
+        ],'empty-layout.php');
     }
 
     public static function mensaje(Router $router) {
         View::render('auth/mensaje', [
             'titulo' => 'Cuenta Creada Exitosamente'
-        ]);
+        ],'empty-layout.php');
     }
 
     public static function confirmar(Router $router) {
@@ -256,6 +256,6 @@ class AuthController {
         View::render('auth/confirmar', [
             'titulo' => 'Confirma tu cuenta DevWebcamp',
             'alertas' => Usuario::getAlertas()
-        ]);
+        ],'empty-layout.php');
     }
 }

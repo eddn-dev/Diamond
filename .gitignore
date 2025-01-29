@@ -1,6 +1,6 @@
 # Ignorar carpetas
-vendor/
 node_modules/
 
 # Ignorar archivo específico
 .env
+vendor/
