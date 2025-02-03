@@ -1,6 +1,5 @@
 <main class="auth">
     <div class="auth__container">
-
         <!-- Botón/Cerrar -->
         <div class="auth__close">
             <img class="auth__close-icon" src="/build/img/icons/close.svg" alt="Icono de cerrar"/>
@@ -12,6 +11,19 @@
             <div class="auth__image"></div>
 
             <p class="auth__title"><?php echo $titulo; ?></p>
+            
+            <!-- Bloque de Alertas -->
+            <?php if (isset($alertas) && !empty($alertas)): ?>
+                <?php foreach ($alertas as $tipo => $mensajes): ?>
+                    <?php foreach ($mensajes as $mensaje): ?>
+                        <div class="alerta alerta--<?= $tipo; ?>">
+                            <?= $mensaje; ?>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+            <!-- Formulario de registro -->
             <form class="form" method="POST" action="/registro">
                 <div class="form__campo">
                     <label for="nombre" class="form__label">Nombre:</label>
@@ -21,6 +33,7 @@
                         placeholder="Tu nombre"
                         id="nombre"
                         name="nombre"
+                        value="<?php echo htmlspecialchars($usuario->nombre); ?>"
                     >
                 </div>
 
@@ -32,6 +45,7 @@
                         placeholder="Tu dirección de correo"
                         id="email"
                         name="email"
+                        value="<?php echo htmlspecialchars($usuario->email); ?>"
                     >
                 </div>
 
@@ -43,6 +57,7 @@
                         placeholder="Tu número celular"
                         id="celular"
                         name="celular"
+                        value="<?php echo isset($usuario->celular) ? htmlspecialchars($usuario->celular) : ''; ?>"
                     >
                 </div>
 

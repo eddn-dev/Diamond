@@ -1,9 +1,6 @@
 <main class="auth">
     <h2 class="auth__heading"><?php echo $titulo; ?></h2>
-    <p class="auth__texto">Por favor sigue los pasos para cambiar tu contraseña</p>
-    <?php
-        require_once __DIR__ . '/../templates/alerts.php';
-    ?>  
+    <p class="auth__texto">Por favor sigue los pasos para cambiar tu contraseña</p> 
     <?php if($token_valido){ ?>
 
     <form class="form" method="POST">

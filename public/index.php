@@ -11,8 +11,18 @@ $router = new Router();
 
 $router->get('/login', [AuthController::class, 'login']);
 $router->post('/login', [AuthController::class, 'login']);
+
 $router->get('/registro', [AuthController::class, 'registro']);
 $router->post('/registro', [AuthController::class, 'registro']);
+
 $router->get('/olvide', [AuthController::class, 'olvide']);
 $router->post('/olvide', [AuthController::class, 'olvide']);
+
+$router->get('/reestablecer', [AuthController::class, 'reestablecer']);
+$router->post('/reestablecer', [AuthController::class, 'reestablecer']);
+
+$router->get('/mensaje', [AuthController::class, 'mensaje']);
+
+$router->get('/confirmar', [AuthController::class, 'confirmar']);
+
 $router->dispatch();

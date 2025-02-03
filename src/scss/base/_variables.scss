@@ -1,6 +1,11 @@
 // Fuentes
 @use 'sass:color';
-$font-family: 'Outfit', sans-serif;
+
+@import url('https://fonts.googleapis.com/css2?family=Belleza&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+$font-family-primary: "Lato", serif;
+$font-family-secondary: "Belleza", serif;
+
 
 // Tamaño de Media Queries
 $telefono: 480px;
@@ -10,7 +15,7 @@ $xl_desktop: 1200px;
 
 // Colores
 $color-primary: #E14F3E;
-$color-secondary: #FFE063;
+$color-secondary: #fbe267;
 $color-black: #000000;
 $color-dark: #240501;
 $color-light: #F2EED4;
@@ -18,6 +23,8 @@ $color-white: #FFFFFF;
 $color-gray: #36312B;
 $color-red: rgb(169, 0, 0);
 $color-green: #02db02;
+$color-brown: #4d2e2e;
+$color-salmon: #Ff8c69;
 
 $gradient-background: linear-gradient(90deg, color.adjust($color-gray, $lightness: 10%) 0%, color.adjust($color-gray, $lightness: -10%)  100%);
 $gradient-button: linear-gradient(90deg, #6b3fa5 0%, #6961fa 100%);

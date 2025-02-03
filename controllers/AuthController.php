@@ -16,49 +16,56 @@ class AuthController {
 
     public static function login(Router $router) {
 
+        if (isset($_SESSION['id'])) {
+            if ($_SESSION['admin'] == 1) {
+                header('Location: /admin/dashboard');
+            } else {
+                header('Location: /finalizar-registro');
+            }
+            exit;
+        }
+
         $alertas = [];
 
-        if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usuario = new Usuario($_POST);
-
             $alertas = $usuario->validarLogin();
-            
-            if(empty($alertas)) {
-                // Verificar quel el usuario exista
-                $usuario = Usuario::where('email', $usuario->email);
-                if(!$usuario || !$usuario->confirmado ) {
-                    Usuario::setAlerta('error', 'El Usuario No Existe o no esta confirmado');
+
+            if (empty($alertas)) {
+                // Buscar el usuario en la BD
+                $usuarioFromDB = Usuario::where('email', $usuario->email);
+                if (!$usuarioFromDB || !$usuarioFromDB->confirmado) {
+                    Usuario::setAlerta('error', 'El usuario no existe o no está confirmado');
                 } else {
-                    // El Usuario existe
-                    if( password_verify($_POST['password'], $usuario->password) ) {
+                    if (password_verify($_POST['password'], $usuarioFromDB->password)) {
+                        // Iniciar la sesión y guardar los datos del usuario
+                        $_SESSION['id'] = $usuarioFromDB->id;
+                        $_SESSION['nombre'] = $usuarioFromDB->nombre;
+                        $_SESSION['email'] = $usuarioFromDB->email;
+                        $_SESSION['admin'] = $usuarioFromDB->admin;
                         
-                        // Iniciar la sesión
-                        session_start();    
-                        $_SESSION['id'] = $usuario->id;
-                        $_SESSION['nombre'] = $usuario->nombre;
-                        $_SESSION['email'] = $usuario->email;
-                        $_SESSION['admin'] = $usuario->admin ?? null;
-                        // Redirect
-                        if($usuario->admin == 1){
+                        // Redirigir según el rol del usuario
+                        if ($usuarioFromDB->admin == 1) {
                             header('Location: /admin/dashboard');
                         } else {
                             header('Location: /finalizar-registro');
                         }
+                        exit;
                     } else {
-                        Usuario::setAlerta('error', 'Password Incorrecto');
+                        Usuario::setAlerta('error', 'Contraseña incorrecta');
                     }
                 }
             }
         }
 
+        // Obtener las alertas configuradas (errores o mensajes de información)
         $alertas = Usuario::getAlertas();
-        
-        // Render a la vista 
+
+        // Renderizar la vista de login pasándole las alertas y el título
         View::render('auth/login', [
-            'title' => 'Iniciar Sesión',
-            'alertas' => $alertas
-        ],'empty-layout.php');
+            'title'    => 'Iniciar Sesión',
+            'alertas'  => $alertas
+        ], 'empty-layout.php');
     }
 
     public static function logout() {
@@ -73,30 +80,30 @@ class AuthController {
     public static function registro(Router $router) {
         $alertas = [];
         $usuario = new Usuario();
-    
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usuario->sincronizar($_POST);
             
             // Valida datos
             $alertas = $usuario->validar_cuenta();
-    
+        
             if (empty($alertas)) {
                 // Revisa si el email ya existe
                 $existeUsuario = Usuario::where('email', $usuario->email);
-    
+        
                 if ($existeUsuario) {
-                    $alertas['error'][] = 'El Usuario ya está registrado';
+                    $alertas['error'][] = 'El correo ya está registrado';
                 } else {
                     // Hashear password
                     $usuario->hashPassword();
                     // Generar Token
                     $usuario->crearToken();
-                    // Eliminar password2 sólo ya que no volveremos a mostrarlo
+                    // Eliminar password2, ya que no se mostrará
                     unset($usuario->password2);
-    
+        
                     // Crear nuevo usuario en BD
                     $resultado = $usuario->guardar();
-    
+        
                     if ($resultado['resultado']) {
                         // Enviar email confirmación
                         $email = new Email($usuario->email, $usuario->nombre, $usuario->token);
@@ -110,15 +117,15 @@ class AuthController {
                 }
             }
         }
-    
+        
         // En caso de error, se pasa el mismo $usuario a la vista
         View::render('auth/registro', [
-            'titulo' => 'Crea tu cuenta',
-            'usuario' => $usuario,
-            'alertas' => $alertas
-        ],'empty-layout.php');
-    }    
-
+            'titulo'   => 'Crea tu cuenta',
+            'usuario'  => $usuario,
+            'alertas'  => $alertas
+        ], 'empty-layout.php');
+    }
+    
     public static function olvide(Router $router) {
         $alertas = [];
         
@@ -250,8 +257,6 @@ class AuthController {
 
             Usuario::setAlerta('exito', 'Cuenta Comprobada Correctamente');
         }
-
-     
 
         View::render('auth/confirmar', [
             'titulo' => 'Confirma tu cuenta DevWebcamp',

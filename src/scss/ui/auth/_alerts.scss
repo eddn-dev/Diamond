@@ -1,0 +1,25 @@
+@use 'sass:color';
+@use 'base/variables' as v;
+
+.alerta {
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 1.8rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  text-align: center;
+  box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+  transition: opacity 0.3s ease-in-out;
+
+  &--error {
+    background-color: lighten(v.$color-salmon, 10%);
+    border: 1px solid darken(v.$color-salmon, 10%);
+    color: v.$color-dark;
+  }
+
+  &--exito {
+    background-color: lighten(v.$color-green, 30%);
+    border: 1px solid darken(v.$color-green, 10%);
+    color: v.$color-dark;
+  }
+}

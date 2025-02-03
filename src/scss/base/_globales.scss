@@ -5,15 +5,23 @@ html {
     font-size: 62.5%;
     box-sizing: border-box;
     height: 100%;
+    overflow-y: scroll; /* Fallback para navegadores sin scrollbar-gutter */
 }
 *, *:before, *:after {
     box-sizing: inherit;
 }
+@supports not(scrollbar-gutter: stable) {
+    html {
+        overflow-y: auto; /* Restaura el comportamiento normal si hay soporte */
+    }
+}
+
 body {
-    font-family: v.$font-family;
+    font-family: v.$font-family-primary;
     font-size: 1.8rem;
     color: v.$color-dark;
     background-color: v.$color-black;
+    scrollbar-gutter: stable; /* Moderno: reserva espacio sin forzar barra */
 }
 a {
     text-decoration: none;

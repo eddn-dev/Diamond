@@ -50,7 +50,7 @@
 }
 
 @mixin heading{
-    font-family: v.$font-family;
+    font-family: v.$font-family-primary;
     font-weight: v.$color-white;
     margin: 2rem 0;
 }

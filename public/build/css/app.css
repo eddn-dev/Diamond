@@ -1,4 +1,6 @@
 @charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Belleza&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
 html {
   line-height: 1.15; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
@@ -306,17 +308,24 @@ html {
   font-size: 62.5%;
   box-sizing: border-box;
   height: 100%;
+  overflow-y: scroll; /* Fallback para navegadores sin scrollbar-gutter */
 }
 
 *, *:before, *:after {
   box-sizing: inherit;
 }
 
+@supports not (scrollbar-gutter: stable) {
+  html {
+    overflow-y: auto; /* Restaura el comportamiento normal si hay soporte */
+  }
+}
 body {
-  font-family: "Outfit", sans-serif;
+  font-family: "Lato", serif;
   font-size: 1.8rem;
   color: #240501;
   background-color: #000000;
+  scrollbar-gutter: stable; /* Moderno: reserva espacio sin forzar barra */
 }
 
 a {
@@ -329,7 +338,7 @@ img {
 }
 
 h1, h2, h3 {
-  font-family: "Outfit", sans-serif;
+  font-family: "Lato", serif;
   font-weight: #FFFFFF;
   margin: 2rem 0;
 }
@@ -351,7 +360,7 @@ h3 {
 }
 
 [class$=__heading] {
-  font-family: "Outfit", sans-serif;
+  font-family: "Lato", serif;
   font-weight: #FFFFFF;
   margin: 2rem 0;
   margin: 6rem 0 3rem 0;
@@ -575,7 +584,7 @@ h3 {
   width: 20rem;
   height: 0.2rem;
   transform-origin: 50% 50%;
-  background-color: #FFE063;
+  background-color: #fbe267;
 }
 .auth__container::after {
   right: 0;
@@ -610,7 +619,7 @@ h3 {
 .auth__title {
   position: relative;
   font-size: 2.6rem;
-  font-weight: 700;
+  font-weight: 900;
   color: #FFFFFF;
   margin-bottom: 2rem;
   padding-bottom: 2rem;
@@ -643,9 +652,10 @@ h3 {
   margin: 0 auto;
 }
 .auth__close-text {
-  color: #ffe063;
+  color: #fbe267;
   margin: 0;
   font-size: 1.2rem;
+  font-family: "Belleza", serif;
 }
 
 /* Resto de estilos (formularios, etc.) */
@@ -657,15 +667,18 @@ h3 {
 }
 .form__campo:nth-last-of-type(1) {
   border-bottom: none;
+  border-width: 0.5rem;
 }
 .form__label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 300;
-  color: rgba(255, 224, 99, 0.7);
+  color: #fbe267;
   font-size: 1.4rem;
+  font-family: "Belleza", serif;
 }
 .form__input {
+  border: unset;
   width: 100%;
   padding: 1rem;
   border: 1px solid #ccc;
@@ -677,7 +690,7 @@ h3 {
   width: auto;
   padding: 1.4rem 2.8rem;
   margin: 0 auto;
-  background: linear-gradient(90deg, rgb(252, 201.9230769231, 0), rgb(255, 234.1346153846, 150), rgb(252, 201.9230769231, 0));
+  background: linear-gradient(90deg, rgb(245.5384615385, 205.1538461538, 6.4615384615), rgb(252.3076923077, 235.4807692308, 152.6923076923), rgb(245.5384615385, 205.1538461538, 6.4615384615));
   color: #240501;
   border: none;
   border-radius: 1.8rem;
@@ -706,8 +719,10 @@ h3 {
 .acciones__enlace {
   display: block;
   margin-bottom: 1rem;
-  color: #E14F3E;
+  color: #fbe267;
   text-decoration: none;
+  font-size: 1.4rem;
+  opacity: 0.7;
 }
 .acciones__enlace:hover {
   text-decoration: underline;
@@ -716,5 +731,26 @@ h3 {
   .acciones {
     flex-direction: row;
   }
+}
+
+.alerta {
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 1.8rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  text-align: center;
+  box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+  transition: opacity 0.3s ease-in-out;
+}
+.alerta--error {
+  background-color: rgb(255, 179.1, 156);
+  border: 1px solid rgb(255, 100.9, 54);
+  color: #240501;
+}
+.alerta--exito {
+  background-color: rgb(120.2307692308, 253.7692307692, 120.2307692308);
+  border: 1px solid rgb(1.5384615385, 168.4615384615, 1.5384615385);
+  color: #240501;
 }
 /*# sourceMappingURL=app.css.map */

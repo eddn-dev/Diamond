@@ -1,4 +1,4 @@
-<footer class="footer">
+<footer class="footer" style="height: 100dvh;">
     <div class="footer__grid">
         <div class="footer__content">
             <h2 class="footer__logo">

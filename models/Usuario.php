@@ -13,6 +13,7 @@ class Usuario extends ActiveRecord
         'confirmado',
         'token',
         'admin',
+        'celular',
         'created'
     ];
 
@@ -23,6 +24,7 @@ class Usuario extends ActiveRecord
     public $confirmado;
     public $token;
     public $admin;
+    public $celular;
     public $created;
 
     // Campos adicionales para validaciones (no se guardan en DB):
@@ -40,6 +42,7 @@ class Usuario extends ActiveRecord
         $this->confirmado = $args['confirmado'] ?? 0;
         $this->token = $args['token'] ?? '';
         $this->admin = $args['admin'] ?? 0;
+        $this->celular = $args['celular'] ?? '';
         $this->created = $args['created'] ?? date('Y-m-d H:i:s');
 
         // Campos para reset / cambio de password
@@ -62,26 +65,40 @@ class Usuario extends ActiveRecord
         return self::$alertas;
     }
 
-    // Validación para cuentas nuevas
-    public function validar_cuenta()
+    public function validar_cuenta(): array
     {
+        // Reiniciamos las alertas antes de comenzar la validación
+        self::$alertas = [];
+
+        // Validar el nombre
         if (!$this->nombre) {
-            self::$alertas['error']['name'] = 'El Nombre es Obligatorio';
+            self::$alertas['error']['nombre'] = 'El Nombre es Obligatorio';
         }
+
+        // Validar el email
         if (!$this->email) {
             self::$alertas['error']['email'] = 'El Email es Obligatorio';
+        } elseif (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            self::$alertas['error']['email'] = 'El Email no es válido';
         }
+
+        // Validar el número celular
+        if (!$this->celular) {
+            self::$alertas['error']['celular'] = 'El número celular es Obligatorio';
+        } elseif (!preg_match('/^\+?[0-9]{10,15}$/', $this->celular)) {
+            // La expresión regular permite un signo opcional seguido de entre 10 y 15 dígitos.
+            self::$alertas['error']['celular'] = 'El número celular no es válido';
+        }
+
+        // Validar el password
         if (!$this->password) {
             self::$alertas['error']['password'] = 'El Password no puede ir vacío';
-        }
-        if (strlen($this->password) < 6) {
+        } elseif (strlen($this->password) < 6) {
             self::$alertas['error']['password'] = 'El password debe contener al menos 6 caracteres';
         }
-        if ($this->password !== $this->password2) {
-            self::$alertas['error']['password_confirm'] = 'Los passwords no coinciden';
-        }
+
         return self::$alertas;
-    }
+}
 
     // Valida un email
     public function validarEmail()
