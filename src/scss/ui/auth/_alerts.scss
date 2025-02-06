@@ -12,14 +12,14 @@
   transition: opacity 0.3s ease-in-out;
 
   &--error {
-    background-color: lighten(v.$color-salmon, 10%);
-    border: 1px solid darken(v.$color-salmon, 10%);
+    background-color: color.adjust(v.$color-salmon, $lightness: 10%);
+    border: 1px solid color.adjust(v.$color-salmon, $lightness: -10%);
     color: v.$color-dark;
   }
 
   &--exito {
-    background-color: lighten(v.$color-green, 30%);
-    border: 1px solid darken(v.$color-green, 10%);
+    background-color: color.adjust(v.$color-green, $lightness: 30%);
+    border: 1px solid color.adjust(v.$color-green, $lightness: 10%);
     color: v.$color-dark;
   }
 }

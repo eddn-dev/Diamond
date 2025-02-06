@@ -1,0 +1,623 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+@use 'sass:color';
+
+@function desktop-to-laptop-scale() {
+  @return calc(100vw - 1024px) / 416;
+}
+
+.landing {
+  background-color: v.$color-black;
+  color: v.$color-gray;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.hero {
+    position: relative;
+    height: 70dvh;
+    min-height: 43rem;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: v.$color-light;
+
+    &__image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.65);
+      transition: transform 0.5s ease;
+      z-index: 0;
+    }
+    &:hover &__image {
+      transform: scale(1.05);
+    }
+
+    &__overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to right, rgba(color.adjust(v.$color-salmon, $lightness: 47%), 0.85), rgba(color.adjust(v.$color-salmon, $lightness: 47%), 0.31));
+      z-index: 1;
+    }
+
+    &__content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      @include m.container;
+
+      @include m.tablet {
+        text-align: left;
+      }
+    }
+
+    .hero__title {
+      font-family: 'Cinzel', serif;
+      // Tamaño de título principal homogeneizado y más definido en escala
+      font-size: clamp(4.2rem, 5.8rem, 7rem); /* Más grande que regular */
+      font-weight: v.$bold;
+      margin-bottom: 1.5rem; // Ligeramente más espaciado inferior
+      letter-spacing: 0.5px; // Reducido para mejor legibilidad en tamaños grandes
+      color: v.$color-black;
+
+      &--highlight {
+        color: color.adjust(v.$color-primary, $lightness: 5%);
+      }
+    }
+
+    .hero__subtitle {
+      // Subtítulo más proporcionado al título, y tamaño base un poco mayor
+      font-size: 1.8rem; // Base aumentada ligeramente
+      margin-bottom: 2.5rem; // Aumentado para equilibrar con el título
+      color: v.$color-black;
+      font-weight: v.$regular; // Peso de fuente regular para diferenciarlo del título
+
+      @include m.tablet {
+        font-size: 2.2rem; // Ligero aumento en tablet para mantener proporción
+      }
+    }
+
+    @include m.tablet {
+      justify-content: flex-start;
+    }
+  }
+
+  .cta.btn {
+    display: inline-block;
+    background: linear-gradient(90deg, color.adjust(v.$color-primary, $lightness: 0%), color.adjust(v.$color-primary, $lightness: -10%));
+    color: v.$color-white;
+    padding: 1.2rem 2.5rem;
+    border-radius: 2rem;
+    text-transform: uppercase;
+    font-weight: v.$bold; // Usando la variable de peso bold
+    letter-spacing: 0.5px; // Reducido para mejor legibilidad
+    border: none;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -75%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: skewX(-25deg);
+      transition: all 0.5s ease;
+    }
+
+    &:hover {
+      transform: translateY(-3px);
+      background: linear-gradient(90deg, color.adjust(v.$color-primary, $lightness: -5%), color.adjust(v.$color-primary, $lightness: -15%));
+
+      &::before {
+        left: 120%;
+      }
+    }
+
+    @include m.tablet {
+      padding: 1.2rem 2.5rem;
+    }
+  }
+
+
+.services {
+  padding: 4rem 1rem; // Aumentado padding superior e inferior para más aire
+  background-color: v.$color-white;
+  text-align: center;
+
+  &__container {
+    @include m.container;
+  }
+
+  &__title {
+    font-family: 'Cinzel', serif;
+    // Tamaño de título de sección homogeneizado y más definido en escala
+    font-size: clamp(3.6rem, calc(3.6rem + (4.8rem - 3.6rem) * desktop-to-laptop-scale()), 4.8rem); // Escala más suave
+    margin-bottom: 2.5rem; // Aumentado para mejor espaciado con las tarjetas
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.75rem; // Aumentado para mantener proporción con el nuevo tamaño de fuente
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 12rem;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, v.$color-secondary, transparent);
+      border-radius: 2px;
+    }
+  }
+
+  &__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem; // Aumentado gap para mejor separación entre tarjetas
+  }
+
+  .service-card {
+    background-color: v.$color-light;
+    border-radius: 1rem;
+    position: relative;
+    overflow: hidden;
+    flex: 1 1 280px;
+    max-width: 320px; // Ligero aumento max-width
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    &__image-container {
+      position: relative;
+      width: 100%;
+      height: 30rem;
+      overflow: hidden;
+
+      .service-card__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+        display: block;
+      }
+    }
+
+    &__inner {
+      padding: 2rem; // Aumentado padding interno para más aire
+      text-align: center;
+      background: linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.95) 100%);
+    }
+
+    &__title {
+      font-family: 'Cinzel', serif;
+      // Tamaño de título de tarjeta homogeneizado y más definido en escala
+      font-size: 2rem; // Aumentado ligeramente
+      margin-bottom: 0.75rem; // Ajustado margin inferior
+      color: v.$color-primary;
+    }
+
+    &__desc {
+      // Tamaño de descripción de tarjeta homogeneizado
+      font-size: 1.4rem; // Aumentado ligeramente para legibilidad
+      margin-bottom: 1.5rem; // Aumentado margin inferior
+      color: v.$color-dark;
+      font-weight: v.$regular; // Peso de fuente regular
+      line-height: 1.6; // Añadido line-height para mejor legibilidad
+    }
+
+    &__demographics {
+      margin-bottom: 1.5rem; // Aumentado margin inferior
+
+      i {
+        font-size: 2.4rem;
+        color: color.adjust(v.$color-secondary, $lightness: -10%);
+        margin: 0 0.4rem; // Ligeramente aumentado margin horizontal
+        transition: color 0.3s;
+
+        &:hover {
+          color: color.adjust(v.$color-secondary, $lightness: -20%);
+        }
+      }
+    }
+
+    &__button {
+      display: inline-block;
+      background: linear-gradient(90deg, v.$color-primary, color.adjust(v.$color-primary, $lightness: -10%));
+      color: v.$color-white;
+      padding: 1rem 2rem; // Aumentado padding botón para mejor proporción
+      border-radius: 2rem;
+      text-transform: uppercase;
+      font-weight: v.$bold; // Usando variable de peso bold
+      letter-spacing: 0.5px; // Reducido letter-spacing
+      transition: background 0.3s ease, transform 0.3s ease;
+      border: none;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+
+      &:hover {
+        transform: translateY(-3px);
+      }
+    }
+  }
+
+  .cta {
+    display: inline-block;
+    margin-top: 2.5rem; // Aumentado margin superior
+
+    &.cta--secondary {
+      background-color: v.$color-secondary;
+      color: v.$color-dark;
+      padding: 1rem 2rem; // Aumentado padding botón secundario
+      border-radius: 2rem;
+      text-transform: uppercase;
+      font-weight: v.$bold; // Usando variable de peso bold
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: color.adjust(v.$color-secondary, $lightness: -10%);
+      }
+
+      @include m.tablet {
+        padding: 1rem 2.5rem; // Padding secundario aumentado en tablet
+      }
+    }
+  }
+}
+
+
+.cta-section {
+  width: 100%;
+  padding: 4rem 0; // Aumentado padding superior e inferior
+  background-color: v.$color-white;
+
+  &__container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: color.adjust(v.$color-salmon, $lightness: 10%);
+  }
+
+  &__image {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+
+    img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+    }
+  }
+
+  &__content {
+    padding: 5rem; // Aumentado padding interno
+    text-align: center;
+    color: v.$color-dark;
+    width: 100%;
+  }
+
+  &__title {
+    font-family: 'Cinzel', serif;
+    // Tamaño de título CTA homogeneizado y más definido en escala
+    font-size: clamp(4.2rem, calc(4.2rem + (5.6rem - 4.2rem) * desktop-to-laptop-scale()), 5.6rem); // Escala más suave
+    margin-bottom: 1.5rem; // Ajustado margin inferior
+  }
+
+  &__subtitle {
+    // Subtítulo CTA homogeneizado
+    font-size: 1.8rem; // Aumentado ligeramente
+    margin-bottom: 2.5rem; // Aumentado margin inferior
+    line-height: 1.7; // Añadido line-height para mejor legibilidad
+    font-weight: v.$regular; // Peso de fuente regular
+  }
+
+  &__button {
+    display: inline-block;
+    background-color: v.$color-primary;
+    color: v.$color-white;
+    padding: 1.2rem 2.5rem; // Padding botón CTA seccion
+    border-radius: 2rem;
+    text-transform: uppercase;
+    font-weight: v.$bold; // Usando variable de peso bold
+    letter-spacing: 0.5px; // Reducido letter-spacing
+    transition: background-color 0.3s, transform 0.3s;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+
+    &:hover {
+      background-color: color.adjust(v.$color-primary, $lightness: -10%);
+      transform: translateY(-3px);
+    }
+  }
+
+  @include m.tablet {
+    &__container {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &__image {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
+
+    &__content {
+      flex: 0 0 50%;
+      max-width: 50%;
+      text-align: left;
+    }
+  }
+}
+
+.branches {
+  padding: 4rem 1rem; // Aumentado padding superior e inferior
+  background-color: v.$color-white;
+  text-align: center;
+
+  &__container {
+    @include m.container();
+  }
+
+  &__title {
+    font-family: 'Cinzel', serif;
+    // Tamaño de título de sección homogeneizado y más definido en escala
+    font-size: clamp(3.6rem, calc(3.6rem + (4.8rem - 3.6rem) * desktop-to-laptop-scale()), 4.8rem); // Misma escala que "services"
+    margin-bottom: 2.5rem; // Mismo margin-bottom que "services"
+    color: v.$color-primary;
+  }
+
+  &__map {
+    @include m.container();
+    height: 250px;
+    background-color: v.$color-light;
+    border: 1px solid v.$color-gray;
+    border-radius: 1rem;
+    margin: 0 auto 2.5rem; // Mismo margin-bottom que el título
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: v.$color-gray;
+
+    @include m.tablet {
+      height: 300px;
+    }
+  }
+
+  .cta.cta--secondary {
+    display: inline-block;
+    margin-top: 2rem; // Aumentado margin superior
+    background-color: v.$color-secondary;
+    color: v.$color-dark;
+    padding: 1rem 2rem; // Mismo padding que cta secundario en "services"
+    border-radius: 2rem;
+    text-transform: uppercase;
+    font-weight: v.$bold; // Usando variable de peso bold
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: color.adjust(v.$color-secondary, $lightness: -10%);
+    }
+
+    @include m.tablet {
+      padding: 1rem 2.5rem;
+    }
+  }
+}
+
+.testimonials {
+  padding: 6rem 2rem; // Aumentamos el padding para dar más espacio y aire a la sección, mejorando la legibilidad.
+  background-color: v.$color-light;
+  text-align: center;
+  position: relative; // Para posicionar el elemento decorativo de fondo.
+  overflow: hidden; // Asegura que el elemento decorativo se mantenga dentro de la sección.
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 12rem; // Altura del elemento decorativo.
+    background-color: color.adjust(v.$color-secondary, $alpha: -0.92); // Un tono muy suave del secundario para un toque de color sutil.
+    transform: skewY(-3deg) translateY(-4rem); // Ligera inclinación y desplazamiento para un efecto visual sutil y moderno.
+    z-index: 0; // Fondo
+  }
+
+  &__container {
+    @include m.container();
+    position: relative; // Para asegurar que el contenido se posicione correctamente sobre el decorativo.
+    z-index: 1; // Sobre el fondo decorativo.
+  }
+
+  &__title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(3.8rem, calc(3.8rem + (5.2rem - 3.8rem) * desktop-to-laptop-scale()), 5.2rem); // Aumentamos ligeramente el tamaño máximo.
+    margin-bottom: 3rem; // Más espacio debajo del título para separarlo de los testimonios.
+    color: v.$color-primary;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.75rem;
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 15rem; // Aumentamos la longitud de la línea decorativa.
+      height: 4px;
+      background: linear-gradient(90deg, transparent, v.$color-secondary, transparent);
+      border-radius: 2px;
+    }
+  }
+
+  &__grid {
+    display: grid; // Cambiamos a Grid Layout para un control más avanzado y layouts más interesantes en el futuro.
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); // Columnas responsivas y flexibles.
+    gap: 3rem; // Aumentamos el espacio entre las tarjetas para una mejor separación visual.
+    max-width: 120rem; // Limitamos el ancho máximo del grid para que no se expanda demasiado en pantallas grandes.
+    margin: 0 auto; // Centramos el grid si es necesario.
+  }
+
+  .testimonial-card {
+    background-color: v.$color-white;
+    padding: 3rem; // Aumentamos el padding interno para dar más "aire" al contenido dentro de la tarjeta.
+    border-radius: 1.5rem; // Bordes más redondeados para un look más suave y moderno.
+    text-align: left; // Alineamos el texto a la izquierda para mejorar la legibilidad en bloques de texto más largos.
+    color: v.$color-dark; // Cambiamos el color del texto a uno más oscuro para mejor contraste y legibilidad sobre fondo blanco.
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1); // Sombra más pronunciada para levantar las tarjetas y darles más presencia.
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative; // Para posicionar el icono de comillas.
+
+    &:hover {
+      transform: translateY(-7px); // Elevación ligeramente mayor al hacer hover.
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15); // Sombra más intensa al hacer hover para destacar la interactividad.
+    }
+
+    &::before {
+      content: '\f10d'; // Icono de comillas de Font Awesome (debes asegurarte de tener Font Awesome integrado o cambiar a otro método de icono).
+      font-family: 'Font Awesome 5 Free'; // Asegúrate que coincide con tu configuración de Font Awesome
+      font-weight: 900; // Font Awesome Solid
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      font-size: 3rem;
+      color: color.adjust(v.$color-secondary, $lightness: 15%, $alpha: -0.7); // Color secundario más claro y transparente para un toque sutil.
+      z-index: 0; // Fondo del icono de comillas.
+    }
+
+    &__text {
+      font-size: 1.8rem; // Aumentamos el tamaño del texto del testimonio para mayor impacto.
+      margin-bottom: 2rem; // Más espacio después del texto del testimonio.
+      line-height: 1.7;
+      position: relative; // Para asegurar que el texto se posicione sobre el icono de comillas.
+      z-index: 1; // Sobre el icono de comillas.
+      font-style: italic; // Añadimos cursiva para diferenciarlo visualmente del resto del texto.
+    }
+
+    &__author-info {
+      display: flex; // Flexbox para alinear la imagen y la información del autor.
+      align-items: center; // Alineación vertical centrada.
+      gap: 1.5rem; // Espacio entre la imagen y el texto del autor.
+      position: relative; // Para asegurar que el contenido se posicione sobre el icono de comillas.
+      z-index: 1; // Sobre el icono de comillas.
+      margin-top: 1rem; // Separación del texto del testimonio.
+      padding-top: 1.5rem; // Espacio superior
+      border-top: 1px solid color.adjust(v.$color-gray, $lightness: 60%); // Línea divisoria sutil.
+    }
+
+    &__author-image {
+      width: 5rem; // Tamaño de la imagen del autor.
+      height: 5rem;
+      border-radius: 50%; // Forma circular para la imagen.
+      object-fit: cover; // Asegura que la imagen cubra el círculo sin distorsionar.
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2); // Sombra sutil en la imagen.
+    }
+
+    &__author-name-role {
+      text-align: left; // Alineación a la izquierda para la información del autor.
+    }
+
+    &__author-name {
+      font-size: 1.5rem; // Tamaño del nombre del autor.
+      font-weight: v.$bold; // Nombre del autor en negrita para destacar.
+      color: v.$color-primary; // Color primario para el nombre del autor para enlazar con la identidad visual.
+      display: block; // Asegura que el rol se coloque debajo del nombre.
+      margin-bottom: 0.2rem; // Pequeño espacio inferior.
+    }
+
+    &__author-role {
+      font-size: 1.3rem; // Tamaño del rol del autor.
+      color: v.$color-gray; // Color más suave para el rol, menos importante que el nombre.
+      font-style: normal; // Resetear la cursiva si se hereda de un contexto superior.
+    }
+  }
+}
+
+.final-cta {
+  padding: 8rem 2rem; // Aumentamos significativamente el padding vertical para una sección más imponente y destacada.
+  background: v.$gradient-background; // Usamos el gradiente de fondo grisáceo de tus variables para un look elegante y sutilmente texturizado.
+  text-align: center;
+  position: relative; // Para permitir el posicionamiento absoluto del elemento decorativo.
+  overflow: hidden; // Para asegurar que el elemento decorativo se mantenga dentro de los límites de la sección.
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/build/img/overlay-pattern.png'); // Patrón sutil de overlay para añadir textura e interés visual (debes proporcionar o crear esta imagen).
+    opacity: 0.15; // Transparencia muy baja para que sea un fondo sutil y no distraiga.
+    z-index: 0; // Asegurar que esté en el fondo.
+    pointer-events: none; // Para que no interfiera con la interacción del usuario.
+  }
+
+  &__container {
+    @include m.container();
+    position: relative; // Asegurar que el contenido esté sobre el overlay.
+    z-index: 1;
+  }
+
+  &__text {
+    font-family: 'Cinzel', serif;
+    // Texto CTA final con mayor jerarquía y un toque más cálido
+    font-size: clamp(3.2rem, calc(3.2rem + (4.8rem - 3.2rem) * desktop-to-laptop-scale()), 4.8rem); // Aumentamos el tamaño máximo para mayor presencia.
+    margin-bottom: 3rem; // Más espacio debajo del texto para equilibrar con el botón.
+    color: v.$color-white; // Mantenemos el color blanco para contraste con el fondo más oscuro.
+    line-height: 1.6;
+    text-shadow: 0 2px 4px rgba(v.$color-black, 0.3); // Añadimos una ligera sombra de texto para mejorar la legibilidad y darle un toque "premium".
+  }
+
+  &__button {
+    display: inline-block;
+    background: linear-gradient(135deg, color.adjust(v.$color-secondary, $lightness: -5%), v.$color-secondary); // Degradado más sutil con el color secundario para un botón más elegante y menos "plano".
+    color: v.$color-dark; // Texto del botón en color oscuro para excelente contraste con el fondo claro del botón.
+    padding: 1.5rem 3.5rem; // Aumentamos el padding para un botón más grande y visualmente impactante.
+    border-radius: 3rem; // Bordes más redondeados para un estilo moderno y amigable.
+    text-transform: uppercase;
+    font-weight: v.$black; // Peso de fuente black para máxima fuerza en el texto del botón.
+    letter-spacing: 0.75px; // Ligero aumento del espaciado entre letras para darle más "aire" y presencia al texto del botón.
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    box-shadow: 0 8px 16px rgba(v.$color-black, 0.3); // Sombra más intensa para que el botón "salte" visualmente.
+
+    &:hover {
+      transform: translateY(-5px) scale(1.03); // Elevación y ligero aumento de escala al hacer hover para una micro-interacción atractiva.
+      box-shadow: 0 12px 24px rgba(v.$color-black, 0.4); // Sombra aún más intensa en hover para reforzar la sensación de interactividad.
+    }
+
+    &::before {
+      // Eliminamos el efecto de "brillo" con ::before para este botón, ya que buscamos un estilo más sólido y elegante para el CTA final.
+      content: none; // Eliminamos el pseudo-elemento ::before
+    }
+  }
+}

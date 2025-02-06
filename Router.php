@@ -47,7 +47,7 @@ class Router
             header('HTTP/1.0 404 Not Found');
             View::render('404', [
                 'title' => 'Página no encontrada'
-            ]);
+            ], 'empty-layout.php');
             return;
         }
 

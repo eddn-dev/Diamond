@@ -12,7 +12,18 @@
             <div class="auth__image"></div>
 
             <p class="auth__title"><?php echo $titulo; ?></p>
-            
+
+            <!-- Bloque para mostrar alertas -->
+            <?php if (isset($alertas) && !empty($alertas)): ?>
+                <?php foreach ($alertas as $tipo => $mensajes): ?>
+                    <?php foreach ($mensajes as $mensaje): ?>
+                        <div class="alerta alerta--<?= $tipo; ?>">
+                            <?= $mensaje; ?>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
             <form class="form" method="POST" action="/olvide">
                 <div class="form__campo">
                     <label for="email" class="form__label">Correo electrónico o número celular:</label>
@@ -22,6 +33,7 @@
                         placeholder="Tu correo o número celular"
                         id="email"
                         name="email"
+                        value="<?php echo isset($usuario->email) ? htmlspecialchars($usuario->email) : ''; ?>"
                     >
                 </div>
 

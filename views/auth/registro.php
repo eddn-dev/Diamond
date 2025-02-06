@@ -10,7 +10,7 @@
         <div class="auth__content">
             <div class="auth__image"></div>
 
-            <p class="auth__title"><?php echo $titulo; ?></p>
+            <p class="auth__title"><?php echo $title; ?></p>
             
             <!-- Bloque de Alertas -->
             <?php if (isset($alertas) && !empty($alertas)): ?>

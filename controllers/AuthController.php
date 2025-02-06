@@ -15,22 +15,36 @@ class AuthController {
     }
 
     public static function login(Router $router) {
-
         if (isset($_SESSION['id'])) {
             if ($_SESSION['admin'] == 1) {
                 header('Location: /admin/dashboard');
             } else {
-                header('Location: /finalizar-registro');
+                header('Location: /');
             }
             exit;
         }
-
+    
         $alertas = [];
-
+        $emailPreload = '';
+    
+        // Si la solicitud POST tiene 'action' igual a 'init_session', se precarga el email
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'init_session') {
+            $emailPreload = $_POST['email'] ?? '';
+            // Renderizamos la vista de login con el email precargado y sin procesar la lógica normal
+            View::render('auth/login', [
+                'title'         => 'Iniciar Sesión',
+                'alertas'       => [],
+                'emailPreload'  => $emailPreload
+            ], 'layout.php');
+            return;
+        }
+    
+        // Si es una solicitud POST normal (para iniciar sesión)
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $emailPreload = $_POST['email'];
             $usuario = new Usuario($_POST);
             $alertas = $usuario->validarLogin();
-
+    
             if (empty($alertas)) {
                 // Buscar el usuario en la BD
                 $usuarioFromDB = Usuario::where('email', $usuario->email);
@@ -57,25 +71,31 @@ class AuthController {
                 }
             }
         }
-
-        // Obtener las alertas configuradas (errores o mensajes de información)
+    
         $alertas = Usuario::getAlertas();
-
-        // Renderizar la vista de login pasándole las alertas y el título
         View::render('auth/login', [
-            'title'    => 'Iniciar Sesión',
-            'alertas'  => $alertas
-        ], 'empty-layout.php');
+            'title'         => 'Iniciar Sesión',
+            'alertas'       => $alertas,
+            'emailPreload'  => $emailPreload
+        ], 'layout.php');
     }
+    
 
     public static function logout() {
-        if($_SERVER['REQUEST_METHOD'] === 'POST') {
-            session_start();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            session_start(); // Asegúrate de tener la sesión activa
             $_SESSION = [];
-            header('Location: /');
+            // Puedes destruir la sesión si lo deseas:
+            session_destroy();
+            // Enviar respuesta JSON indicando éxito
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true]);
+            exit;
         }
-       
-    }
+        // Si no es POST, puedes devolver un error
+        header('HTTP/1.1 405 Method Not Allowed');
+        exit;
+    }    
 
     public static function registro(Router $router) {
         $alertas = [];
@@ -120,147 +140,161 @@ class AuthController {
         
         // En caso de error, se pasa el mismo $usuario a la vista
         View::render('auth/registro', [
-            'titulo'   => 'Crea tu cuenta',
+            'title'   => 'Crea tu cuenta',
             'usuario'  => $usuario,
             'alertas'  => $alertas
-        ], 'empty-layout.php');
+        ], 'layout.php');
     }
     
     public static function olvide(Router $router) {
         $alertas = [];
+        // Crear una instancia vacía para re-popular el campo en caso de error.
+        $usuario = new Usuario();
         
-        if($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $usuario = new Usuario($_POST);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Sincroniza los datos enviados (para re-popular el campo, por ejemplo)
+            $usuario->sincronizar($_POST);
+            // Validar el email (o número, según la lógica actual del método)
             $alertas = $usuario->validarEmail();
-
-            if(empty($alertas)) {
-                // Buscar el usuario
-                $usuario = Usuario::where('email', $usuario->email);
-
-                if($usuario && $usuario->confirmado) {
-
-                    // Generar un nuevo token
-                    $usuario->crearToken();
-                    unset($usuario->password2);
-
-                    // Actualizar el usuario
-                    $usuario->guardar();
-
-                    // Enviar el email
-                    $email = new Email( $usuario->email, $usuario->nombre, $usuario->token );
+    
+            if (empty($alertas)) {
+                // Buscar el usuario por email
+                $usuarioEncontrado = Usuario::where('email', $usuario->email);
+    
+                if ($usuarioEncontrado && $usuarioEncontrado->confirmado) {
+                    // Generar un nuevo token y actualizar el usuario
+                    $usuarioEncontrado->crearToken();
+                    unset($usuarioEncontrado->password2);
+                    $usuarioEncontrado->guardar();
+    
+                    // Enviar el email con las instrucciones
+                    $email = new Email($usuarioEncontrado->email, $usuarioEncontrado->nombre, $usuarioEncontrado->token);
                     $email->enviarInstrucciones();
-
-
-                    // Imprimir la alerta
-                    // Usuario::setAlerta('exito', 'Hemos enviado las instrucciones a tu email');
-
+    
                     $alertas['exito'][] = 'Hemos enviado las instrucciones a tu email';
                 } else {
-                 
-                    // Usuario::setAlerta('error', 'El Usuario no existe o no esta confirmado');
-
-                    $alertas['error'][] = 'El Usuario no existe o no esta confirmado';
+                    $alertas['error'][] = 'El usuario no existe o no está confirmado';
                 }
             }
         }
-
-        // Muestra la vista
+    
+        // Renderizar la vista pasando título, alertas y el objeto usuario (para re-popular el formulario)
         View::render('auth/olvide', [
-            'titulo' => 'Olvide mi Password',
-            'alertas' => $alertas
-        ],'empty-layout.php');
+            'title'  => 'Olvidé mi Password',
+            'alertas' => $alertas,
+            'usuario' => $usuario
+        ], 'layout.php');
     }
+       
 
     public static function reestablecer(Router $router) {
-
-        $token = s($_GET['token']);
-
+        // Obtener el token desde la URL
+        $token = s($_GET['token'] ?? '');
+    
+        // Si no hay token, redirige a la página de inicio
+        if(!$token) {
+            header('Location: /');
+            exit;
+        }
+    
+        // Inicializar bandera para token válido y buscar el usuario
         $token_valido = true;
-
-        if(!$token) header('Location: /');
-
-        // Identificar el usuario con este token
         $usuario = Usuario::where('token', $token);
-
-        if(empty($usuario)) {
-            Usuario::setAlerta('error', 'Token No Válido, intenta de nuevo');
+    
+        if(!$usuario) {
+            Usuario::setAlerta('error', 'Token no válido, intenta de nuevo');
             $token_valido = false;
         }
-
-
+    
+        // Procesar el formulario si se envía y el token es válido
         if($_SERVER['REQUEST_METHOD'] === 'POST' && $token_valido) {
-            if(empty($_POST['password2'])){
-                Usuario::setAlerta('error', 'Confirmar contraseña es obligatorio');
+            // Sincronizar datos enviados en el formulario
+            $usuario->sincronizar($_POST);
+    
+            // Validar que ambos campos estén completos
+            if(empty($_POST['password']) || empty($_POST['password2'])) {
+                Usuario::setAlerta('error', 'Ambos campos son obligatorios');
             }
-            if($_POST['password'] === $_POST['password2']){
-                $usuario->sincronizar($_POST);
-                // Validar el password
+            // Verificar que las contraseñas coincidan
+            elseif($_POST['password'] !== $_POST['password2']) {
+                Usuario::setAlerta('error', 'Las contraseñas no coinciden');
+            }
+            else {
+                // Validar el nuevo password (longitud mínima, etc.)
                 $alertas = $usuario->validarPassword();
-
                 if(empty($alertas)) {
-                    // Hashear el nuevo password
+                    // Hashear la nueva contraseña
                     $usuario->hashPassword();
-
-                    // Eliminar el Token
+                    // Eliminar el token para que no se pueda reutilizar
                     $usuario->token = null;
-
-                    // Guardar el usuario en la BD
+                    // Guardar la actualización en la BD
                     $resultado = $usuario->guardar();
-
-                    // Redireccionar
+    
                     if($resultado) {
+                        Usuario::setAlerta('exito', 'Tu contraseña se actualizó correctamente');
+                        // Redirigir a la página de login
                         header('Location: /login');
+                        exit;
+                    } else {
+                        Usuario::setAlerta('error', 'Hubo un error al actualizar la contraseña, intenta de nuevo');
                     }
                 }
             }
-            else{
-                Usuario::setAlerta('error', 'Las contraseñas no coinciden');
-            }
         }
-
+    
+        // Recuperar las alertas para pasarlas a la vista
         $alertas = Usuario::getAlertas();
-        
-        // Muestra la vista
+    
+        // Renderizar la vista "reestablecer"
         View::render('auth/reestablecer', [
-            'titulo' => 'Reestablecer Password',
-            'alertas' => $alertas,
-            'token_valido' => $token_valido
-        ],'empty-layout.php');
+            'title'      => 'Reestablecer Password',
+            'alertas'     => $alertas,
+            'token_valido'=> $token_valido
+        ], 'layout.php');
     }
+    
 
     public static function mensaje(Router $router) {
         View::render('auth/mensaje', [
-            'titulo' => 'Cuenta Creada Exitosamente'
-        ],'empty-layout.php');
+            'title' => 'Cuenta Creada Exitosamente'
+        ],'layout.php');
     }
 
     public static function confirmar(Router $router) {
-        
-        $token = s($_GET['token']);
-
-        if(!$token) header('Location: /');
-
-        // Encontrar al usuario con este token
+        // Obtener el token de la URL y sanitizarlo
+        $token = s($_GET['token'] ?? '');
+    
+        // Si no existe token, redirige a la página de inicio
+        if (!$token) {
+            header('Location: /');
+            exit;
+        }
+    
+        // Buscar al usuario asociado a este token
         $usuario = Usuario::where('token', $token);
-
-        if(empty($usuario)) {
-            // No se encontró un usuario con ese token
-            Usuario::setAlerta('error', 'Token No Válido, la cuenta no se confirmó');
+    
+        if (empty($usuario)) {
+            // Si no se encuentra usuario, se configura una alerta de error
+            Usuario::setAlerta('error', 'Token no válido, la cuenta no se confirmó');
         } else {
-            // Confirmar la cuenta
+            // Confirmar la cuenta: se actualiza el estado y se limpia el token
             $usuario->confirmado = 1;
             $usuario->token = '';
             unset($usuario->password2);
             
-            // Guardar en la BD
+            // Guardar los cambios en la base de datos
             $usuario->guardar();
-
-            Usuario::setAlerta('exito', 'Cuenta Comprobada Correctamente');
+            $email = $usuario->email;
+    
+            // Configurar una alerta de éxito
+            Usuario::setAlerta('exito', 'Cuenta comprobada correctamente');
         }
-
+    
+        // Renderizar la vista "confirmar" pasando el título y las alertas
         View::render('auth/confirmar', [
-            'titulo' => 'Confirma tu cuenta DevWebcamp',
-            'alertas' => Usuario::getAlertas()
-        ],'empty-layout.php');
+            'title'  => 'Confirma tu cuenta DevWebcamp',
+            'alertas' => Usuario::getAlertas(),
+            'email' => $email
+        ], 'layout.php');
     }
 }

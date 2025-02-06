@@ -8,19 +8,28 @@
   align-items: center;
   justify-content: center;
   min-height: 100dvh;
-  padding-top:5rem; padding-bottom: 5rem;
-  
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+
   &__container {
     @include m.container-xm();
-    background-image: linear-gradient(45deg, color.adjust(v.$color-black, $lightness: 2%), color.adjust(v.$color-black, $lightness: 10%) 70%, color.adjust(v.$color-black, $lightness: 15%) 90%);
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
-    border-radius: 2.5rem; 
+    /* Fondo: Se cambia el degradado basado en negro por uno que combine tonos claros */
+    background-image: linear-gradient(
+      45deg,
+      v.$color-light,
+      v.$color-secondary 70%,
+      v.$color-white 90%
+    );
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    border-radius: 2.5rem;
     display: flex;
     flex-direction: column;
-    overflow: hidden; 
+    overflow: hidden;
     position: relative;
 
-    &::after, &::before{
+    /* Líneas decorativas con el color secundario */
+    &::after,
+    &::before {
       position: absolute;
       content: '';
       width: 20rem;
@@ -28,14 +37,13 @@
       transform-origin: 50% 50%;
       background-color: v.$color-secondary;
     }
-    &::after{
+    &::after {
       right: 0;
       top: 0;
       height: 0.3rem;
       transform: translate(5rem, 5rem) rotate(45deg);
     }
-
-    &::before{
+    &::before {
       left: 0;
       bottom: 0;
       transform: translate(-5rem, -5rem) rotate(45deg);
@@ -43,7 +51,7 @@
   }
 
   &__image {
-    /* Máximo 5rem de alto en mobile */
+    /* Logo o imagen de la autenticación */
     min-height: 7rem;
     background-image: url('../img/logo.webp');
     background-position: center;
@@ -57,7 +65,7 @@
     flex-direction: column;
     justify-content: center;
 
-    @include m.telefono{
+    @include m.telefono {
       padding: 2rem 4rem;
     }
   }
@@ -66,13 +74,14 @@
     position: relative;
     font-size: 2.6rem;
     font-weight: v.$black;
-    color: v.$color-white;
+    /* Se cambia el color a uno más oscuro acorde con el fondo claro */
+    color: v.$color-dark;
     margin-bottom: 2rem;
     padding-bottom: 2rem;
     text-align: left;
-    border-bottom: 0.2rem dotted rgba(v.$color-white, 0.1);
-  
-    &::before{
+    border-bottom: 0.2rem dotted rgba(v.$color-dark, 0.1);
+
+    &::before {
       content: "";
       position: absolute;
       display: inline-block;
@@ -81,27 +90,27 @@
       background-image: url('../img/icons/scissors.svg');
       background-repeat: no-repeat;
       background-position: center;
-      background-size: contain; 
+      background-size: contain;
       bottom: 0;
       right: 20%;
       transform: translateY(50%);
     }
   }
 
-  &__close{
+  &__close {
     position: absolute;
     right: 1rem;
     top: 1rem;
 
-    &-icon{
+    &-icon {
       display: block;
       width: 3rem;
       height: 3rem;
       margin: 0 auto;
     }
 
-    &-text{
-      color: color.adjust(v.$color-secondary, $lightness: 0%);
+    &-text {
+      color: v.$color-secondary; // Usa el color secundario para resaltar
       margin: 0;
       font-size: v.$font-sm;
       font-family: v.$font-family-secondary;
@@ -109,15 +118,15 @@
   }
 }
 
-/* Resto de estilos (formularios, etc.) */
+/* Estilos para los formularios de autenticación */
 .form {
   &__campo {
     margin-bottom: 2rem;
     padding-bottom: 2rem;
     text-align: left;
-    border-bottom: 0.2rem dotted rgba(v.$color-white, 0.1);
+    border-bottom: 0.2rem dotted rgba(v.$color-dark, 0.1);
 
-    &:nth-last-of-type(1){
+    &:nth-last-of-type(1) {
       border-bottom: none;
       border-width: 0.5rem;
     }
@@ -126,7 +135,8 @@
     display: block;
     margin-bottom: 0.5rem;
     font-weight: v.$tiny;
-    color: rgba(#fbe267, 1);
+    /* Se cambia el color del label al color secundario */
+    color: v.$color-secondary;
     font-size: 1.4rem;
     font-family: v.$font-family-secondary;
   }
@@ -134,7 +144,8 @@
     border: unset;
     width: 100%;
     padding: 1rem;
-    border: 1px solid #ccc;
+    /* Borde con color acorde a la paleta (por ejemplo, gris claro) */
+    border: 1px solid v.$color-gray;
     border-radius: 1.8rem;    
     font-size: 1.6rem;
   }
@@ -143,8 +154,14 @@
     width: auto;
     padding: 1.4rem 2.8rem;
     margin: 0 auto;
-    background: linear-gradient(90deg, color.adjust(v.$color-secondary, $lightness: -20%), color.adjust(v.$color-secondary, $lightness: 10%), color.adjust(v.$color-secondary, $lightness: -20%));
-    color: v.$color-dark;
+    /* Botón: Usamos un degradado que combine los colores primario y secundario */
+    background: linear-gradient(
+      90deg,
+      color.adjust(v.$color-primary, $lightness: -10%),
+      v.$color-primary,
+      color.adjust(v.$color-primary, $lightness: -10%)
+    );
+    color: v.$color-white;
     border: none;
     border-radius: 1.8rem;
     font-size: 1.8rem;
@@ -154,7 +171,7 @@
     @include m.transition(background-color, 0.3s);
 
     &:hover {
-      background-color: color.adjust(v.$color-primary, $lightness: -10%);
+      background-color: color.adjust(v.$color-primary, $lightness: -15%);
     }
   }
 }
@@ -163,7 +180,6 @@
   @include m.container-xm();
   margin-top: 2rem;
   text-align: center;
-  
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -180,8 +196,7 @@
     }
   }
 
-  @include m.tablet
-  {
+  @include m.tablet {
     flex-direction: row;
   }
 }
