@@ -37,12 +37,12 @@ class Appointment extends ActiveRecord
         $this->user_id = $args['user_id'] ?? null;
         $this->location_id = $args['location_id'] ?? null;
         $this->employee_id = $args['employee_id'] ?? null;
-        $this->appointment_date = $args['appointment_date'] ?? date('Y-m-d');
-        $this->appointment_time = $args['appointment_time'] ?? date('H:i:s');
-        $this->status = $args['status'] ?? 'pending';
+        $this->appointment_date = $args['appointment_date'] ?? '';
+        $this->appointment_time = $args['appointment_time'] ?? '';
+        $this->status = $args['status'] ?? 'pending'; // Valor por defecto 'pending'
         $this->client_name = $args['client_name'] ?? '';
         $this->client_phone = $args['client_phone'] ?? '';
         $this->comments = $args['comments'] ?? '';
-        $this->created_at = $args['created_at'] ?? date('Y-m-d H:i:s');
+        $this->created_at = $args['created_at'] ?? null; // El valor por defecto CURRENT_TIMESTAMP lo maneja la DB
     }
 }

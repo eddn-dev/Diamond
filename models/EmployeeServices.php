@@ -2,7 +2,7 @@
 
 namespace Model;
 
-class EmployeeServices extends ActiveRecord
+class EmployeeService extends ActiveRecord
 {
     protected static string $tabla = 'employee_services';
     protected static array $columnasDB = [

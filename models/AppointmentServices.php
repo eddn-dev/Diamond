@@ -2,7 +2,7 @@
 
 namespace Model;
 
-class AppointmentServices extends ActiveRecord
+class AppointmentService extends ActiveRecord
 {
     protected static string $tabla = 'appointment_services';
     protected static array $columnasDB = [

@@ -28,6 +28,6 @@ class Employee extends ActiveRecord
         $this->name = $args['name'] ?? '';
         $this->email = $args['email'] ?? '';
         $this->phone = $args['phone'] ?? '';
-        $this->is_active = $args['is_active'] ?? 1;
+        $this->is_active = $args['is_active'] ?? 1; // Valor por defecto 1 (activo)
     }
 }
