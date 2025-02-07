@@ -10,7 +10,8 @@ class Locations extends ActiveRecord
         'name',
         'address',
         'phone',
-        'is_active'
+        'is_active',
+        'photo'
     ];
 
     public $id;
@@ -18,6 +19,7 @@ class Locations extends ActiveRecord
     public $address;
     public $phone;
     public $is_active;
+    public $photo;
 
     public function __construct($args = [])
     {
@@ -26,5 +28,6 @@ class Locations extends ActiveRecord
         $this->address = $args['address'] ?? '';
         $this->phone = $args['phone'] ?? '';
         $this->is_active = $args['is_active'] ?? 1; // Valor por defecto 1 (activo)
+        $this->photo = $args['photo'] ?? 'default';
     }
 }
